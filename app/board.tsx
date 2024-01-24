@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react"
 import Square from "./square"
+import knightMoves from "./pieceMovement"
 
 // let piecesIds = {
 //     'none': 0,
@@ -23,29 +24,55 @@ const initialState = {
              4, 2, 3 ,5 ,6 ,3, 2, 4],
 }
 
+const temp = 
+    [0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 2, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0]
+
 export default function Board() {
 
-    const [board, setBoard] = useState<number[]>(initialState.board)
+    const [board, setBoard] = useState<number[]>(temp)
     const [selected, setSelected] = useState<number>(-1)
     const SelectedIsValid = selected > -1 ? true : false
+    const [validMoves, setValidMoves] = useState<number[]>([])
 
-    function squareClick(squareId:number){
-        console.log(selected, SelectedIsValid)
-        if (SelectedIsValid){
+    function calculateValidMoves(squareId:number){
+        let pieceId = board[squareId]
+        let col = squareId % 8
+        let row = (squareId - col) / 8
+        if (Math.abs(pieceId) === 2 && !SelectedIsValid){
+            return setValidMoves(knightMoves(squareId))
+        }
+        setValidMoves([])
+    }
+
+    function squareClick(squareId:number){   
+        if (SelectedIsValid && selected !== squareId){
             let tBoard = board
             tBoard[squareId] = board[selected]
             tBoard[selected] = 0
             setSelected(-1)
+            calculateValidMoves(squareId)
             return setBoard(board)
         }
-        if (board[squareId] === 0 || squareId === selected){ return setSelected(-1) }
-        return setSelected(squareId)
+        if (board[squareId] === 0 || squareId === selected){ 
+            setSelected(-1)
+            calculateValidMoves(squareId)
+            return  
+        }
+        setSelected(squareId)
+        calculateValidMoves(squareId)
     }
 
     function renderSquares(){
         let squares = new Array()
         for (let i = 0; i < 64; i++){
-            squares.push(<Square click={squareClick} selected={selected} pieceId={board[i]} squareId={i} key={i} />)
+            squares.push(<Square validMoves={validMoves} click={squareClick} selected={selected} pieceId={board[i]} squareId={i} key={i} />)
         }
         return(squares)
     }

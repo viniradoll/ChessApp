@@ -18,6 +18,7 @@ type Props = {
     pieceId: number,
     selected: number,
     click: any,
+    validMoves: number[],
 }
 
 interface pieceImage{
@@ -45,18 +46,21 @@ function getPiece(id:number):pieceImage{
     }
 }
 
-function getBackgroundColor(squareId:number, selected:number):string{
+function getBackgroundColor(validMoves:number[], squareId:number, selected:number):string{
+    if (validMoves.includes(squareId)){
+        return 'bg-neutral-900'
+    }
     if (selected !== squareId){
         return (squareId + Math.floor(squareId / 8)) % 2 === 0 ? 'bg-slate-500' : 'bg-slate-800'
     }
     return 'bg-cyan-800'
 }
 
-export default function Square({ squareId, pieceId, selected, click }: Props){
+export default function Square({ squareId, pieceId, selected, click, validMoves }: Props){
     let piece:pieceImage = getPiece(pieceId)
     return(
         <div onClick={() => click(squareId)}
-        className={`${getBackgroundColor(squareId, selected)} h-[102px] w-auto flex items-center justify-center`} >
+        className={`${getBackgroundColor(validMoves, squareId, selected)} h-[102px] w-auto flex items-center justify-center`} >
             <Image 
             src={piece.image}
             height={piece.size}
