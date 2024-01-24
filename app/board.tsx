@@ -23,11 +23,6 @@ const initialState = {
              4, 2, 3 ,5 ,6 ,3, 2, 4]
 }
 
-interface Piece {
-    readonly color: -1 | 1
-    readonly type: 0 | 1 | 2 | 3 | 4 | 5 | 6 
-}
-
 export default function Board() {
 
     const [board, setBoard] = useState<number[]>(initialState.board)
