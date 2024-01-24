@@ -16,6 +16,8 @@ import empty from '../public/pieces/empty.png'
 type Props = {
     squareId: number,
     pieceId: number,
+    selected: number,
+    click: any,
 }
 
 interface pieceImage{
@@ -43,11 +45,18 @@ function getPiece(id:number):pieceImage{
     }
 }
 
-export default function Square({ squareId, pieceId }: Props){
-    let background = (squareId + Math.floor(squareId / 8)) % 2 === 0 ? 'bg-slate-500' : 'bg-slate-800'
+function getBackgroundColor(squareId:number, selected:number):string{
+    if (selected !== squareId){
+        return (squareId + Math.floor(squareId / 8)) % 2 === 0 ? 'bg-slate-500' : 'bg-slate-800'
+    }
+    return 'bg-cyan-800'
+}
+
+export default function Square({ squareId, pieceId, selected, click }: Props){
     let piece:pieceImage = getPiece(pieceId)
     return(
-        <div className={`${background} h-[102px] w-[102px] flex items-center justify-center`} >
+        <div onClick={() => click(squareId)}
+        className={`${getBackgroundColor(squareId, selected)} h-[102px] w-auto flex items-center justify-center`} >
             <Image 
             src={piece.image}
             height={piece.size}

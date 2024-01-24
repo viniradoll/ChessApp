@@ -20,17 +20,32 @@ const initialState = {
              0, 0, 0, 0, 0, 0, 0, 0,
              0, 0, 0, 0, 0, 0, 0, 0,
              1, 1, 1, 1, 1, 1, 1, 1,
-             4, 2, 3 ,5 ,6 ,3, 2, 4]
+             4, 2, 3 ,5 ,6 ,3, 2, 4],
 }
 
 export default function Board() {
 
     const [board, setBoard] = useState<number[]>(initialState.board)
+    const [selected, setSelected] = useState<number>(-1)
+    const SelectedIsValid = selected > -1 ? true : false
+
+    function squareClick(squareId:number){
+        console.log(selected, SelectedIsValid)
+        if (SelectedIsValid){
+            let tBoard = board
+            tBoard[squareId] = board[selected]
+            tBoard[selected] = 0
+            setSelected(-1)
+            return setBoard(board)
+        }
+        if (board[squareId] === 0 || squareId === selected){ return setSelected(-1) }
+        return setSelected(squareId)
+    }
 
     function renderSquares(){
         let squares = new Array()
         for (let i = 0; i < 64; i++){
-            squares.push(<Square pieceId={board[i]} squareId={i} key={i} />)
+            squares.push(<Square click={squareClick} selected={selected} pieceId={board[i]} squareId={i} key={i} />)
         }
         return(squares)
     }
