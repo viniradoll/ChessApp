@@ -15,36 +15,44 @@ import empty from '../public/pieces/empty.png'
 
 type Props = {
     squareId: number,
-    pieceId: string,
+    pieceId: number,
 }
 
-const pieceDatabase = {
-    "0": empty,
-    "1": wpawn,
-    "2": wknight,
-    "3": wbishop,
-    "4": wrook,
-    "5": wqueen,
-    "6": wking,
-    "-1": bpawn,
-    "-2": bknight,
-    "-3": bbishop,
-    "-4": brook,
-    "-5": bqueen,
-    "-6": bking,
+interface pieceImage{
+    id: number,
+    image: StaticImageData,
+    size: number,
+}
+
+function getPiece(id:number):pieceImage{
+    switch (id){
+        case 0: return { id: id, size: 80, image: empty }
+        case 1: return { id: id, size: 55, image: wpawn }
+        case 2: return { id: id, size: 70, image: wknight }
+        case 3: return { id: id, size: 75, image: wbishop }
+        case 4: return { id: id, size: 65, image: wrook }
+        case 5: return { id: id, size: 80, image: wqueen }
+        case 6: return { id: id, size: 75, image: wking }
+        case -1: return { id: id, size: 55, image: bpawn }
+        case -2: return { id: id, size: 70, image: bknight }
+        case -3: return { id: id, size: 75, image: bbishop }
+        case -4: return { id: id, size: 65, image: brook }
+        case -5: return { id: id, size: 80, image: bqueen }
+        case -6: return { id: id, size: 75, image: bking }
+        default: return { id: id, size: 80, image: empty }
+    }
 }
 
 export default function Square({ squareId, pieceId }: Props){
     let background = (squareId + Math.floor(squareId / 8)) % 2 === 0 ? 'bg-slate-500' : 'bg-slate-800'
-    let piece: StaticImageData = pieceDatabase[pieceId]
-
+    let piece:pieceImage = getPiece(pieceId)
     return(
         <div className={`${background} h-[102px] w-[102px] flex items-center justify-center`} >
             <Image 
-            src={piece}
-            height={"-1".includes(pieceId) ? 60 : 80}
-            width={"-1".includes(pieceId) ? 60 : 80}
-            alt='Ola'
+            src={piece.image}
+            height={piece.size}
+            width={piece.size}
+            alt=''
             />
         </div>
     )

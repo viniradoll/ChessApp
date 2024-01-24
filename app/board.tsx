@@ -35,7 +35,7 @@ export default function Board() {
     function renderSquares(){
         let squares = new Array()
         for (let i = 0; i < 64; i++){
-            squares.push(<Square pieceId={board[i].toString()} squareId={i} key={i} />)
+            squares.push(<Square pieceId={board[i]} squareId={i} key={i} />)
         }
         return(squares)
     }
