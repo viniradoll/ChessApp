@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 import Square from "./square"
-import knightMoves from "./pieceMovement"
+import pieceMoves from "./pieceMovement"
 
 // let piecesIds = {
 //     'none': 0,
@@ -29,9 +29,9 @@ const temp =
      0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 2, 0, 0, 0,
+     0, 0, 0, 2, 4, 3, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 5, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0]
 
 export default function Board() {
@@ -46,13 +46,22 @@ export default function Board() {
         let col = squareId % 8
         let row = (squareId - col) / 8
         if (Math.abs(pieceId) === 2 && !SelectedIsValid){
-            return setValidMoves(knightMoves(squareId))
+            return setValidMoves(pieceMoves.knight(squareId))
+        }
+        if (Math.abs(pieceId) === 3 && !SelectedIsValid){
+            return setValidMoves(pieceMoves.bishop(squareId))
+        }
+        if (Math.abs(pieceId) === 4 && !SelectedIsValid){
+            return setValidMoves(pieceMoves.rook(squareId))
+        }
+        if (Math.abs(pieceId) === 5 && !SelectedIsValid){
+            return setValidMoves(pieceMoves.queen(squareId))
         }
         setValidMoves([])
     }
 
     function squareClick(squareId:number){   
-        if (SelectedIsValid && selected !== squareId){
+        if (SelectedIsValid && selected !== squareId && validMoves.includes(squareId)){
             let tBoard = board
             tBoard[squareId] = board[selected]
             tBoard[selected] = 0
