@@ -27,7 +27,7 @@ const initialState = {
 const temp = 
     [0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, -3, -2, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 2, 4, 3, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
@@ -43,19 +43,8 @@ export default function Board() {
 
     function calculateValidMoves(squareId:number){
         let pieceId = board[squareId]
-        let col = squareId % 8
-        let row = (squareId - col) / 8
-        if (Math.abs(pieceId) === 2 && !SelectedIsValid){
-            return setValidMoves(pieceMoves.knight(squareId))
-        }
-        if (Math.abs(pieceId) === 3 && !SelectedIsValid){
-            return setValidMoves(pieceMoves.bishop(squareId))
-        }
-        if (Math.abs(pieceId) === 4 && !SelectedIsValid){
-            return setValidMoves(pieceMoves.rook(squareId))
-        }
-        if (Math.abs(pieceId) === 5 && !SelectedIsValid){
-            return setValidMoves(pieceMoves.queen(squareId))
+        if (!SelectedIsValid){
+            return setValidMoves(pieceMoves(pieceId,squareId, board))
         }
         setValidMoves([])
     }
