@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.half-transparent{
+    border-color: rgba(203, 203, 203, 0.5)
+}

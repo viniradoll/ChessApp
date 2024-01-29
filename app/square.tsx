@@ -12,6 +12,7 @@ import wpawn from '../public/pieces/w_pawn_png_128px.png'
 import wqueen from '../public/pieces/w_queen_png_128px.png'
 import wrook from '../public/pieces/w_rook_png_128px.png'
 import empty from '../public/pieces/empty.png'
+import './globals.css'
 
 type Props = {
     squareId: number,
@@ -46,10 +47,7 @@ function getPiece(id:number):pieceImage{
     }
 }
 
-function getBackgroundColor(validMoves:number[], squareId:number, selected:number):string{
-    if (validMoves.includes(squareId)){
-        return 'bg-neutral-900'
-    }
+function getBackgroundColor(squareId:number, selected:number):string{
     if (selected !== squareId){
         return (squareId + Math.floor(squareId / 8)) % 2 === 0 ? 'bg-slate-500' : 'bg-slate-800'
     }
@@ -58,9 +56,12 @@ function getBackgroundColor(validMoves:number[], squareId:number, selected:numbe
 
 export default function Square({ squareId, pieceId, selected, click, validMoves }: Props){
     let piece:pieceImage = getPiece(pieceId)
+    let selectableCSS = pieceId === 0 ? 'h-8 w-8 rounded-full bg-gray-700 absolute' : 'absolute h-24 w-24 rounded-full border-8 half-transparent'
+    let selectable = <div className={selectableCSS}/>
     return(
         <div onClick={() => click(squareId)}
-        className={`${getBackgroundColor(validMoves, squareId, selected)} h-[102px] w-auto flex items-center justify-center`} >
+        className={`${getBackgroundColor(squareId, selected)} h-[102px] w-auto flex items-center justify-center`} >
+            { validMoves.includes(squareId) ? selectable : null}
             <Image 
             src={piece.image}
             height={piece.size}

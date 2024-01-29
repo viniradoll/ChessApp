@@ -27,23 +27,27 @@ const initialState = {
 const temp = 
     [0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, -3, -2, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 2, 4, 3, 0, 0,
+     0, 0, 0, 2, 2, 2, 0, 0,
+     0, 0, 0, 2, 1, 2, 0, 0,
+     0, 0, 0, 2, 2, 2, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 5, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0]
 
 export default function Board() {
 
-    const [board, setBoard] = useState<number[]>(temp)
+    const [board, setBoard] = useState<number[]>(initialState.board)
     const [selected, setSelected] = useState<number>(-1)
     const SelectedIsValid = selected > -1 ? true : false
     const [validMoves, setValidMoves] = useState<number[]>([])
+    const [player, setPlayer] = useState<number>(1)
 
     function calculateValidMoves(squareId:number){
         let pieceId = board[squareId]
-        if (!SelectedIsValid){
+        if (squareId === selected){
+            return setValidMoves([])
+        }
+        if (!SelectedIsValid || !validMoves.includes(squareId)){
             return setValidMoves(pieceMoves(pieceId,squareId, board))
         }
         setValidMoves([])
@@ -56,12 +60,17 @@ export default function Board() {
             tBoard[selected] = 0
             setSelected(-1)
             calculateValidMoves(squareId)
+            let newPlayer = player * -1
+            setPlayer(newPlayer)
             return setBoard(board)
         }
         if (board[squareId] === 0 || squareId === selected){ 
             setSelected(-1)
             calculateValidMoves(squareId)
             return  
+        }
+        if (board[squareId] * player < 0){
+            return
         }
         setSelected(squareId)
         calculateValidMoves(squareId)
