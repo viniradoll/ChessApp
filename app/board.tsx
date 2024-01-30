@@ -76,6 +76,13 @@ export default function Board() {
         calculateValidMoves(squareId)
     }
 
+    function dragStart(squareId:number){
+        if (squareId === 0){
+            return
+        }
+        
+    }
+
     function renderSquares(){
         let squares = new Array()
         for (let i = 0; i < 64; i++){

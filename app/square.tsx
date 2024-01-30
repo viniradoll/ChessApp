@@ -59,10 +59,12 @@ export default function Square({ squareId, pieceId, selected, click, validMoves 
     let selectableCSS = pieceId === 0 ? 'h-8 w-8 rounded-full bg-gray-700 absolute' : 'absolute h-24 w-24 rounded-full border-8 half-transparent'
     let selectable = <div className={selectableCSS}/>
     return(
-        <div onClick={() => click(squareId)}
+        <div onClick={() => click(squareId)} onDrop={() => click(squareId)} onDragOver={e => e.preventDefault()}
         className={`${getBackgroundColor(squareId, selected)} h-[102px] w-auto flex items-center justify-center`} >
             { validMoves.includes(squareId) ? selectable : null}
             <Image 
+            draggable
+            onDragStart={() => click(squareId)}
             src={piece.image}
             height={piece.size}
             width={piece.size}
